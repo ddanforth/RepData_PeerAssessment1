@@ -141,13 +141,14 @@ _______________________________________________________________________
 
 ```r
 #Get the mean for each 5 minute interval
-mean_by_interval <- aggregate(x = activity_clean[c("steps")], FUN = mean, by = list(interval = activity_clean$interval))
+mean_by_interval <- aggregate(x = activity_clean[c("steps")], FUN = mean, 
+                              by = list(interval = activity_clean$interval))
 
 #Replace NAs with corresoponding average 5 minute interval data
 activity_temp <- merge(activity, mean_by_interval, by=c("interval"))
-        activity_temp$steps.x[is.na(activity_temp$steps.x)] <- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
-        activity_temp$steps.y <- NULL
-        activity_allsum <- with(activity_temp, aggregate(steps.x, by = list(date), sum))
+activity_temp$steps.x[is.na(activity_temp$steps.x)] <- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
+activity_temp$steps.y <- NULL
+activity_allsum <- with(activity_temp, aggregate(steps.x, by = list(date), sum))
 ```
 
 #####4. Make a histogram of the total number of steps taken each day. 
@@ -178,10 +179,12 @@ _______________________________________________________________________
 
 As shown below, after inputing the NAs the mean and median values are now exactly the same. Imputing the NAs has changed the  median. 
 
-Ignoring NAs|Imputing NAs
--|-
-Mean: 10766.19|Mean: 10766.19
-Median: 10765|Median: 10766.19
+
+Ignoring NAs Mean:      10766.19
+Imputing NAs Mean:      10766.19
+ 
+Ignoring NAs Median:    10765
+Imputing NAs Median:     10766.19
 
 
 ### Are there differences in activity patterns between weekdays and weekends?
@@ -189,7 +192,8 @@ Median: 10765|Median: 10766.19
 
 ```r
 # Weekday vs. Weekend.
-activity_temp$daytype <- as.factor(ifelse(weekdays(as.Date(activity_temp$date)) %in% c("Saturday","Sunday"), "Weekend", "Weekday")) 
+activity_temp$daytype <- as.factor(ifelse(weekdays(as.Date(activity_temp$date)) %in% 
+                                                  c("Saturday","Sunday"), "Weekend", "Weekday")) 
 ```
 
 #####2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).

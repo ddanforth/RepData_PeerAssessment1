@@ -331,13 +331,14 @@ print(p2)
 <p>#####3. Create a new dataset that is equal to the original dataset but with the missing data filled in.</p>
 
 <pre><code class="r">#Get the mean for each 5 minute interval
-mean_by_interval &lt;- aggregate(x = activity_clean[c(&quot;steps&quot;)], FUN = mean, by = list(interval = activity_clean$interval))
+mean_by_interval &lt;- aggregate(x = activity_clean[c(&quot;steps&quot;)], FUN = mean, 
+                              by = list(interval = activity_clean$interval))
 
 #Replace NAs with corresoponding average 5 minute interval data
 activity_temp &lt;- merge(activity, mean_by_interval, by=c(&quot;interval&quot;))
-        activity_temp$steps.x[is.na(activity_temp$steps.x)] &lt;- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
-        activity_temp$steps.y &lt;- NULL
-        activity_allsum &lt;- with(activity_temp, aggregate(steps.x, by = list(date), sum))
+activity_temp$steps.x[is.na(activity_temp$steps.x)] &lt;- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
+activity_temp$steps.y &lt;- NULL
+activity_allsum &lt;- with(activity_temp, aggregate(steps.x, by = list(date), sum))
 </code></pre>
 
 <p>#####4. Make a histogram of the total number of steps taken each day. 
@@ -365,17 +366,19 @@ b_median &lt;- median(activity_allsum$x)
 
 <p>As shown below, after inputing the NAs the mean and median values are now exactly the same. Imputing the NAs has changed the  median. </p>
 
-<p>Ignoring NAs|Imputing NAs
--|-
-Mean: 10766.19|Mean: 10766.19
-Median: 10765|Median: 10766.19</p>
+<p>Ignoring NAs Mean:      10766.19
+Imputing NAs Mean:      10766.19</p>
+
+<p>Ignoring NAs Median:    10765
+Imputing NAs Median:     10766.19</p>
 
 <h3>Are there differences in activity patterns between weekdays and weekends?</h3>
 
 <p>#####1. Create a new factor variable in the dataset with two levels &ndash; &ldquo;weekday&rdquo; and &ldquo;weekend&rdquo; indicating whether a given date is a weekday or weekend day.</p>
 
 <pre><code class="r"># Weekday vs. Weekend.
-activity_temp$daytype &lt;- as.factor(ifelse(weekdays(as.Date(activity_temp$date)) %in% c(&quot;Saturday&quot;,&quot;Sunday&quot;), &quot;Weekend&quot;, &quot;Weekday&quot;)) 
+activity_temp$daytype &lt;- as.factor(ifelse(weekdays(as.Date(activity_temp$date)) %in% 
+                                                  c(&quot;Saturday&quot;,&quot;Sunday&quot;), &quot;Weekend&quot;, &quot;Weekday&quot;)) 
 </code></pre>
 
 <p>#####2. Make a panel plot containing a time series plot (i.e. type = &ldquo;l&rdquo;) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).</p>

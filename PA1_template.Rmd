@@ -131,13 +131,14 @@ _______________________________________________________________________
 #####3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 ```{r echo = TRUE}
 #Get the mean for each 5 minute interval
-mean_by_interval <- aggregate(x = activity_clean[c("steps")], FUN = mean, by = list(interval = activity_clean$interval))
+mean_by_interval <- aggregate(x = activity_clean[c("steps")], FUN = mean, 
+                              by = list(interval = activity_clean$interval))
 
 #Replace NAs with corresoponding average 5 minute interval data
 activity_temp <- merge(activity, mean_by_interval, by=c("interval"))
-        activity_temp$steps.x[is.na(activity_temp$steps.x)] <- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
-        activity_temp$steps.y <- NULL
-        activity_allsum <- with(activity_temp, aggregate(steps.x, by = list(date), sum))
+activity_temp$steps.x[is.na(activity_temp$steps.x)] <- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
+activity_temp$steps.y <- NULL
+activity_allsum <- with(activity_temp, aggregate(steps.x, by = list(date), sum))
 
 ```
 
@@ -165,17 +166,20 @@ _______________________________________________________________________
 
 As shown below, after inputing the NAs the mean and median values are now exactly the same. Imputing the NAs has changed the  median. 
 
-Ignoring NAs|Imputing NAs
--|-
-Mean: `r format(a_mean, digits=7)`|Mean: `r format(b_mean, digits=7)`
-Median: `r format(a_median, digits=7)`|Median: `r format(b_median, digits=7)`
+
+Ignoring NAs Mean:      `r format(a_mean, digits=7)`
+Imputing NAs Mean:      `r format(b_mean, digits=7)`
+ 
+Ignoring NAs Median:    `r format(a_median, digits=7)`
+Imputing NAs Median:     `r format(b_median, digits=7)`
 
 
 ### Are there differences in activity patterns between weekdays and weekends?
 #####1. Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 ```{r echo = TRUE}
 # Weekday vs. Weekend.
-activity_temp$daytype <- as.factor(ifelse(weekdays(as.Date(activity_temp$date)) %in% c("Saturday","Sunday"), "Weekend", "Weekday")) 
+activity_temp$daytype <- as.factor(ifelse(weekdays(as.Date(activity_temp$date)) %in% 
+                                                  c("Saturday","Sunday"), "Weekend", "Weekday")) 
 ```
 
 #####2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
