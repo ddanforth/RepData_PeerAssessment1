@@ -146,7 +146,8 @@ mean_by_interval <- aggregate(x = activity_clean[c("steps")], FUN = mean,
 
 #Replace NAs with corresoponding average 5 minute interval data
 activity_temp <- merge(activity, mean_by_interval, by=c("interval"))
-activity_temp$steps.x[is.na(activity_temp$steps.x)] <- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
+activity_temp$steps.x[is.na(activity_temp$steps.x)] <- 
+        activity_temp$steps.y[is.na(activity_temp$steps.x)] 
 activity_temp$steps.y <- NULL
 activity_allsum <- with(activity_temp, aggregate(steps.x, by = list(date), sum))
 ```
@@ -181,9 +182,12 @@ As shown below, after inputing the NAs the mean and median values are now exactl
 
 
 Ignoring NAs Mean:      10766.19
+
 Imputing NAs Mean:      10766.19
+
  
 Ignoring NAs Median:    10765
+
 Imputing NAs Median:     10766.19
 
 

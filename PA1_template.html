@@ -336,7 +336,8 @@ mean_by_interval &lt;- aggregate(x = activity_clean[c(&quot;steps&quot;)], FUN =
 
 #Replace NAs with corresoponding average 5 minute interval data
 activity_temp &lt;- merge(activity, mean_by_interval, by=c(&quot;interval&quot;))
-activity_temp$steps.x[is.na(activity_temp$steps.x)] &lt;- activity_temp$steps.y[is.na(activity_temp$steps.x)] 
+activity_temp$steps.x[is.na(activity_temp$steps.x)] &lt;- 
+        activity_temp$steps.y[is.na(activity_temp$steps.x)] 
 activity_temp$steps.y &lt;- NULL
 activity_allsum &lt;- with(activity_temp, aggregate(steps.x, by = list(date), sum))
 </code></pre>
@@ -366,11 +367,13 @@ b_median &lt;- median(activity_allsum$x)
 
 <p>As shown below, after inputing the NAs the mean and median values are now exactly the same. Imputing the NAs has changed the  median. </p>
 
-<p>Ignoring NAs Mean:      10766.19
-Imputing NAs Mean:      10766.19</p>
+<p>Ignoring NAs Mean:      10766.19</p>
 
-<p>Ignoring NAs Median:    10765
-Imputing NAs Median:     10766.19</p>
+<p>Imputing NAs Mean:      10766.19</p>
+
+<p>Ignoring NAs Median:    10765</p>
+
+<p>Imputing NAs Median:     10766.19</p>
 
 <h3>Are there differences in activity patterns between weekdays and weekends?</h3>
 
